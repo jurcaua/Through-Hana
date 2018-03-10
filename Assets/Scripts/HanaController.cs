@@ -5,7 +5,7 @@ using UnityEngine;
 public class HanaController : MonoBehaviour {
 
     public Transform flowers;
-    public float startScale = 1f;
+    public float startScale = 2f;
     public float endScale = 4f;
     public Vector2 growRange = new Vector2(1f, 2f);
 
@@ -18,6 +18,9 @@ public class HanaController : MonoBehaviour {
 
     [Header("Debug")]
     public bool debug = false;
+
+    // testing
+    enum BendAxis { X, Y, Z };
 
     void Start() {
         startPosition = flowers.localPosition;
@@ -35,6 +38,10 @@ public class HanaController : MonoBehaviour {
 
     public void GrowHana() {
         StartCoroutine(Bloom());
+    }
+
+    public void BendHana() {
+        StartCoroutine(Flow());
     }
 
     private IEnumerator Bloom() {
@@ -58,9 +65,10 @@ public class HanaController : MonoBehaviour {
                 }
                 flower.localScale = Vector3.Lerp(startScaleVector, endScaleVector, t);
                 flower.localPosition = Vector3.Lerp(startPosition, startPosition + flower.up * growOut, t);
-                t += 0.01f;
+                t += 0.02f;
                 yield return new WaitForSeconds(Time.deltaTime);
             }
+            BendHana();
 
             if (debug) {
                 Debug.Log("Hana " + thisFlowerIndex + " is done growing. :)");
@@ -70,6 +78,19 @@ public class HanaController : MonoBehaviour {
                 Debug.Log("No more flowers!");
             }
         }
+    }
+
+    void Update() {
+        
+    }
+
+    private IEnumerator Flow() {
+        if (currentHana > 0) { // If at least one flower has been spawned
+            // should be a for loop but this is just a test of some code
+            int j = 0;
+
+        }
+        yield return null;
     }
 
     Quaternion GetFlowerRandomRotation() {

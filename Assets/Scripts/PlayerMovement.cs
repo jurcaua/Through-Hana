@@ -41,9 +41,9 @@ public class PlayerMovement : MonoBehaviour {
 
     void Movement() {
         transform.position = new Vector3(
-            transform.position.x + (horizontal * speed), 
+            transform.position.x + (horizontal * speed * Time.deltaTime), 
             transform.position.y, 
-            transform.position.z + (vertical * speed)
+            transform.position.z + (vertical * speed * Time.deltaTime)
         );
 
         if (jump && onGround) {
