@@ -43,11 +43,15 @@ public class CloudController : MonoBehaviour {
             float intensity = Mathf.Clamp01((1 - (currentPosition.y - transform.position.y)));
             if (intensity > 0 && Physics.Raycast(new Ray(currentPosition, -player.transform.up), out _hit, whatIsCloud)) {
                 Debug.Log(_hit.collider.name);
-                _drawMaterial.SetVector("_Coordinate", new Vector4(_hit.textureCoord.x, _hit.textureCoord.y, 0f, 0f));
-                _drawMaterial.SetFloat("_Intensity", intensity);
-                RenderTexture temp = RenderTexture.GetTemporary(_splatMap.width, _splatMap.height, 0, RenderTextureFormat.ARGBFloat);
-                Graphics.Blit(temp, _splatMap, _drawMaterial);
-                RenderTexture.ReleaseTemporary(temp);
+                if (Vector3.Distance(
+                        currentPosition,
+                        Physics.ClosestPoint(currentPosition, _hit.collider, _hit.collider.transform.position, _hit.collider.transform.rotation)) < 0.5f) {
+                    _drawMaterial.SetVector("_Coordinate", new Vector4(_hit.textureCoord.x, _hit.textureCoord.y, 0f, 0f));
+                    _drawMaterial.SetFloat("_Intensity", intensity);
+                    RenderTexture temp = RenderTexture.GetTemporary(_splatMap.width, _splatMap.height, 0, RenderTextureFormat.ARGBFloat);
+                    Graphics.Blit(temp, _splatMap, _drawMaterial);
+                    RenderTexture.ReleaseTemporary(temp);
+                }
             } else {
                 //_splatMap = new RenderTexture(1024, 1024, 0, RenderTextureFormat.ARGBFloat);
             }
